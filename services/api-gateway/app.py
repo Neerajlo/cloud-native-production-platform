@@ -6,7 +6,7 @@ app = FastAPI(title="Cloud-Native API Gateway", version="1.0.0")
 
 PRODUCT_SERVICE_URL = os.getenv(
     "PRODUCT_SERVICE_URL",
-    "http://localhost:8001"
+    "http://product-service:8000"
 )
 
 
