@@ -34,10 +34,14 @@ jobs:
           pip install -r services/product-service/requirements.txt
           pip install pytest httpx
 
-      - name: Run product service tests
-        working-directory: services/product-service
+      - name: Show test files
         run: |
-          python -m pytest -q
+          ls -la services/product-service
+          find services/product-service -type f -name "test_*.py"
+
+      - name: Run product service tests
+        run: |
+          python -m pytest -q services/product-service/tests
 
   build-and-push:
     name: Build and Push Product Service
