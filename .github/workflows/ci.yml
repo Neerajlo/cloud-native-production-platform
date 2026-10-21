@@ -25,8 +25,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
-          cache-dependency-path: services/product-service/requirements.txt
 
       - name: Install dependencies
         run: |
@@ -34,14 +32,21 @@ jobs:
           pip install -r services/product-service/requirements.txt
           pip install pytest httpx
 
-      - name: Show test files
+      - name: Find test files
+        shell: bash
         run: |
-          ls -la services/product-service
-          find services/product-service -type f -name "test_*.py"
+          echo "Searching for Python test files..."
+          find . -type f \( -name "test_*.py" -o -name "*_test.py" \)
 
       - name: Run product service tests
+        shell: bash
         run: |
-          python -m pytest -q services/product-service/tests
+          TEST_FILE=$(find . -type f -name "test_product_service.py" -print -quit)
+          if [ -z "$TEST_FILE" ]; then
+            echo "ERROR: test_product_service.py was not found."
+            exit 1
+          fi
+          python -m pytest -q "$TEST_FILE"
 
   build-and-push:
     name: Build and Push Product Service
