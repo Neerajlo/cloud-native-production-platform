@@ -1,8 +1,21 @@
 services:
   product-service:
-    build:
-      context: ./services/product-service
-    container_name: product-service
+    build: ./services/product-service
     ports:
       - "8001:8000"
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - product-service
+      - order-service
+    restart: unless-stopped
+
+  order-service:
+    build: ./services/order-service
+    ports:
+      - "8002:8002"
     restart: unless-stopped
