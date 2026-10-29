@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,21 +25,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: services/product-service/requirements.txt
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r services/product-service/requirements.txt
-          pip install pytest httpx
-
-      - name: Show test files
-        run: |
-          Get-ChildItem -Path services/product-service -Recurse -Filter "test*.py"
-        shell: pwsh
+          python -m pip install -r services/product-service/requirements.txt
+          python -m pip install pytest httpx
 
       - name: Run product service tests
         run: |
-          python -m pytest -q services/product-service/tests/test_product_service.py
+          python -m pytest -q tests/test_product_service.py
 
   docker-build:
     name: Build Docker Images
@@ -52,21 +50,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build API Gateway
+      - name: Build API Gateway image
         uses: docker/build-push-action@v6
         with:
           context: ./services/api-gateway
           push: false
           tags: cloud-native-api-gateway:ci
 
-      - name: Build Product Service
+      - name: Build Product Service image
         uses: docker/build-push-action@v6
         with:
           context: ./services/product-service
           push: false
           tags: cloud-native-product-service:ci
 
-      - name: Build Order Service
+      - name: Build Order Service image
         uses: docker/build-push-action@v6
         with:
           context: ./services/order-service
