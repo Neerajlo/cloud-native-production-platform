@@ -94,7 +94,7 @@ cloud-native-production-platform/
 
 
 
-\## Run the Application
+## Run the Application
 
 
 
@@ -121,8 +121,32 @@ Start the services:
 docker compose up --build
 
 ```
+## Deploy to Kubernetes
 
+Create the Kubernetes namespace:
 
+```bash
+kubectl apply -f k8s/namespace.yaml
+
+kubectl apply -f k8s/product-service.yaml
+kubectl apply -f k8s/order-service.yaml
+kubectl apply -f k8s/api-gateway.yaml
+```
+Check deployment status:
+
+```bash
+kubectl get pods -n cloud-native
+kubectl get services -n cloud-native
+kubectl get deployments -n cloud-native
+```
+
+Access API Gateway:
+
+```bash
+kubectl port-forward -n cloud-native svc/api-gateway 8081:8080
+```
+
+Swagger documentation: http://localhost:8081/docs
 
 Stop the services:
 
@@ -184,7 +208,6 @@ GitHub Actions is configured to run automated tests and build Docker images when
 
 
 
-\- Kubernetes deployment
 
 \- Helm charts
 
