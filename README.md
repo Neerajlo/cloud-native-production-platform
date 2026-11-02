@@ -221,6 +221,46 @@ GitHub Actions is configured to run automated tests and build Docker images when
 
 
 
+## Monitoring with Prometheus and Grafana
+
+The project uses Prometheus and Grafana for monitoring Kubernetes workloads and infrastructure.
+
+### Monitoring Components
+
+- Prometheus for metrics collection and querying.
+- Grafana for dashboard visualization.
+- Node Exporter for system-level metrics.
+- Kubernetes monitoring through kube-prometheus-stack.
+
+### Grafana Dashboard
+
+Dashboard Name: Cloud Native Production Monitoring
+
+The dashboard includes:
+
+- Prometheus Target Health
+- CPU Usage (%)
+- Memory Usage (%)
+- Disk Usage (%)
+- Kubernetes Pod Status
+
+### Access Grafana
+
+Start port forwarding:
+
+```bash
+kubectl port-forward deployment/monitoring-grafana 3000:3000 -n monitoring
+```
+
+Open Grafana in your browser:
+
+http://localhost:3000
+
+### Verify Monitoring Pods
+
+```bash
+kubectl get pods -n monitoring
+```
 \## Author
 
 
