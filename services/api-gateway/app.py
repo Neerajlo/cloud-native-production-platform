@@ -2,7 +2,8 @@ import os
 import logging
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 # Logging
@@ -16,6 +17,22 @@ app = FastAPI(
     description="API Gateway for Product and Order microservices",
 )
 
+# Public demo read-only middleware
+@app.middleware("http")
+async def read_only_public_demo(request: Request, call_next):
+    read_only = os.getenv("PUBLIC_READ_ONLY", "false").lower() == "true"
+
+    if read_only and request.method not in ("GET", "HEAD", "OPTIONS"):
+        return JSONResponse(
+            status_code=403,
+            content={
+                "detail": "Read-only public demo. Write operations are disabled."
+            },
+        )
+
+    return await call_next(request)
+
+
 # Microservice URLs
 PRODUCT_SERVICE_URL = os.getenv(
     "PRODUCT_SERVICE_URL",
@@ -27,14 +44,24 @@ ORDER_SERVICE_URL = os.getenv(
     "http://order-service:8002",
 )
 
+
 # Request models for order validation
 class OrderItem(BaseModel):
-    product_id: int = Field(gt=0, description="Product ID must be positive")
-    quantity: int = Field(gt=0, description="Quantity must be positive")
+    product_id: int = Field(
+        gt=0,
+        description="Product ID must be positive",
+    )
+    quantity: int = Field(
+        gt=0,
+        description="Quantity must be positive",
+    )
 
 
 class OrderRequest(BaseModel):
-    customer_id: int = Field(gt=0, description="Customer ID must be positive")
+    customer_id: int = Field(
+        gt=0,
+        description="Customer ID must be positive",
+    )
     items: list[OrderItem] = Field(
         min_length=1,
         description="At least one order item is required",

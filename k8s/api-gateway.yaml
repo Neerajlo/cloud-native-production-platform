@@ -17,9 +17,15 @@ spec:
         - name: api-gateway
           image: cloud-native-production-platform-api-gateway:latest
           imagePullPolicy: IfNotPresent
+          env:
+            - name: PUBLIC_READ_ONLY
+              value: "true"
+            - name: PRODUCT_SERVICE_URL
+              value: "http://product-service:8000"
+            - name: ORDER_SERVICE_URL
+              value: "http://order-service:8002"
           ports:
             - containerPort: 8080
-
           readinessProbe:
             httpGet:
               path: /health
@@ -28,30 +34,14 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
-
           livenessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 15
+            initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 2
             failureThreshold: 3
-
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-
-          env:
-            - name: PRODUCT_SERVICE_URL
-              value: "http://product-service:8000"
-            - name: ORDER_SERVICE_URL
-              value: "http://order-service:8002"
-
 ---
 apiVersion: v1
 kind: Service
@@ -62,6 +52,7 @@ spec:
   selector:
     app: api-gateway
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 8080
       targetPort: 8080
   type: ClusterIP
