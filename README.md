@@ -261,6 +261,29 @@ http://localhost:3000
 ```bash
 kubectl get pods -n monitoring
 ```
+## Public Demo (Temporary)
+
+The API Gateway is accessible through a temporary Cloudflare Quick Tunnel.
+
+**Public API URL:**
+https://bestsellers-odds-waiver-allocation.trycloudflare.com
+
+**Swagger API Documentation:**
+https://bestsellers-odds-waiver-allocation.trycloudflare.com/docs
+
+### Available Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | API health check |
+| GET | `/api/products` | List all products |
+| GET | `/api/products/{product_id}` | Get product details |
+| GET | `/api/orders` | List orders |
+| POST | `/api/orders` | Disabled in public demo |
+
+**Security:** Public demo is configured as read-only. Write operations return HTTP 403 Forbidden.
+
+**Note:** This is a temporary Cloudflare Quick Tunnel. The URL is available only while the tunnel and local Kubernetes environment are running. It is not a permanent production deployment.
 \## Author
 
 
