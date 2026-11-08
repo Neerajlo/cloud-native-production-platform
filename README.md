@@ -284,9 +284,15 @@ https://bestsellers-odds-waiver-allocation.trycloudflare.com/docs
 **Security:** Public demo is configured as read-only. Write operations return HTTP 403 Forbidden.
 
 **Note:** This is a temporary Cloudflare Quick Tunnel. The URL is available only while the tunnel and local Kubernetes environment are running. It is not a permanent production deployment.
-\## Author
 
+---
 
+## Project Presentation
+
+[📥 Download Project PPT](./Cloud_Native_Production_Platform_ppt.pptx)
+
+## Author
 
 Neeraj Lodhi
+
 
