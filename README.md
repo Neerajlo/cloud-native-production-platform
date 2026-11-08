@@ -423,8 +423,6 @@ The complete project presentation is available in this repository.
 
 **Neeraj Lodhi**
 
-Final-Year B.Tech Computer Science Engineering  
-Specialization: Cyber Security
 
 ### GitHub Repository
 
